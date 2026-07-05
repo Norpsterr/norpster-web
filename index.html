@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Fernando Ramos — 3D artist. Projects, art, and a blog.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://callusedtoes.com/">
+    <meta property="og:title" content="Fernando Ramos — CallusedToes">
+    <meta property="og:description" content="Fernando Ramos — 3D artist. Projects, art, and a blog.">
+    <meta property="og:image" content="https://callusedtoes.com/images/profile.jpg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Fernando Ramos — CallusedToes">
+    <meta name="twitter:description" content="Fernando Ramos — 3D artist. Projects, art, and a blog.">
+    <meta name="twitter:image" content="https://callusedtoes.com/images/profile.jpg">
+    <title>CallusedToes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fernando Ramos.</h1>
+            <nav>
+                <button type="button" class="nav-item" aria-pressed="false" onclick="toggleProjectsView()">
+                    <img src="images/Projects Icon.png" class="nav-icons" alt=""/>
+                    <div class="nav-label">Projects</div>
+                </button>
+                <button type="button" class="nav-item" aria-haspopup="dialog" onclick="openModal('socials')">
+                    <img src="images/Socials Icon.png" class="nav-icons" alt=""/>
+                    <div class="nav-label">Socials</div>
+                </button>
+                <button type="button" class="nav-item" aria-haspopup="dialog" onclick="openModal('blog')">
+                    <img src="images/Blog icon.png" class="nav-icons" alt=""/>
+                    <div class="nav-label">Blog</div>
+                </button>
+                <button type="button" class="nav-item" aria-haspopup="dialog" onclick="openModal('about')">
+                    <img src="images/About Icon.png" class="nav-icons" alt=""/>
+                    <div class="nav-label">About</div>
+                </button>
+            </nav>
+        </header>
+    </div>
+
+    <main class="projects-grid">
+        <!-- Projects grid. Add a path to data-full on any card to show a higher-res image in the modal; leave it empty to fall back to the thumbnail. -->
+        <a href="https://x.com/Norpsterr/status/1939695608547205171/photo/1" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/Chiikawa.png" class="project-image" alt="Chiikawa fan art render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <a href="https://x.com/Norpsterr/status/2068144974747562476?s=20" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/quiet.png" class="project-image" alt="Burger roadside booth low poly render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <a href="https://x.com/Norpsterr/status/2069596585718161699?s=20" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/shame-and-pray.png" class="project-image" alt="motel room retro low poly render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <a href="https://x.com/Norpsterr/status/2072914916747436403?s=20" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/sign-3.png" class="project-image" alt="caution high water sign render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <a href="https://x.com/Norpsterr/status/2065841224892789144?s=20" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/foggy-road.png" class="project-image" alt="foggy road render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <a href="https://x.com/Norpsterr/status/2066697587986473277?s=20" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/Getaway.png" class="project-image" alt="old car render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <a href="https://x.com/Norpsterr/status/2065533392150491232?s=20" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/Hexacostal-cross.png" class="project-image" alt="Hexacostal cross render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <a href="https://x.com/Norpsterr/status/2064959705756192994?s=20" target="_blank" rel="noopener noreferrer" class="project-card" data-full="">
+            <img src="images/bag.png" class="project-image" alt="trash bag with tools render" loading="lazy"/>
+            <div class="project-title"></div>
+        </a>
+        <div class="project-card" data-full="">
+            <img src="images/mecha-man.jpeg" class="project-image" alt="mecha man dispatch render" loading="lazy"/>
+            <div class="project-title"></div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="socials-modal" class="modal" onclick="closeModalOnBackdrop(event, 'socials')" role="dialog" aria-modal="true" aria-labelledby="socials-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="socials-modal-title">Socials</h2>
+                <button class="modal-close" onclick="closeModal('socials')" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body centered">
+                <a href="https://x.com/Norpsterr" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="#1DA1F2" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                    </svg>
+                    <span class="social-handle">@Norpsterr</span>
+                </a>
+                <a href="https://github.com/Norpsterr" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="#181717" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    <span class="social-handle">Norpsterr</span>
+                </a>
+                <a href="https://www.youtube.com/@Norpsterr" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <svg class="social-icon" viewBox="0 0 24 24" fill="#FF0000" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    <span class="social-handle">@Norpsterr</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="blog-modal" class="modal" onclick="closeModalOnBackdrop(event, 'blog')" role="dialog" aria-modal="true" aria-labelledby="blog-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="blog-modal-title">Blog</h2>
+                <button class="modal-close" onclick="closeModal('blog')" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body centered">
+                <p>Check in here later!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="about-modal" class="modal" onclick="closeModalOnBackdrop(event, 'about')" role="dialog" aria-modal="true" aria-labelledby="about-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="about-modal-title">About</h2>
+                <button class="modal-close" onclick="closeModal('about')" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body centered">
+                <div class="about-content">
+                    <img src="images/profile.jpg" alt="Profile Picture" class="profile-image">
+                    <p>Hi, I'm Fer! I'm a 3D artist and game dev who grew up around old horror ps2 games, Web 1.0 aesthetics, and lots of movies.<br><br>On this website, you'll find a portfolio of the projects I'm most proud of, my socials, and a blog where you'll be able to read essays, reflections on the things I've learned while working, and opinion pieces about stuff I find interesting.<br><br>Thanks for visiting!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="project-modal" class="modal" onclick="closeModalOnBackdrop(event, 'project')" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+        <div class="modal-content image-modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="project-modal-title">Project</h2>
+                <button class="modal-close" onclick="closeModal('project')" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body image-body">
+                <a id="project-modal-link" class="modal-image-link" target="_blank" rel="noopener noreferrer">
+                    <img id="project-modal-image" src="" alt="">
+                </a>
+                <a id="project-modal-cta" class="modal-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Join the Discord ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isDragging = false;
+        let currentModal = null;
+        let offsetX = 0;
+        let offsetY = 0;
+        let lastFocusedElement = null;
+
+        function toggleProjectsView() {
+            const isActive = document.body.classList.toggle('projects-view');
+            document.documentElement.classList.toggle('projects-view');
+
+            document.querySelector('.nav-item[aria-pressed]').setAttribute('aria-pressed', isActive);
+
+            if (!isActive) {
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function openModal(section) {
+            const modal = document.getElementById(section + '-modal');
+
+            lastFocusedElement = document.activeElement;
+
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open');
+
+            modal.offsetHeight;
+
+            modal.classList.add('active');
+
+            // Move focus into the dialog for keyboard/screen-reader users
+            const closeButton = modal.querySelector('.modal-close');
+            if (closeButton) closeButton.focus();
+        }
+
+        function closeModal(section) {
+            const modal = document.getElementById(section + '-modal');
+            const modalContent = modal.querySelector('.modal-content');
+            
+            modal.classList.add('closing');
+            
+            setTimeout(() => {
+                modal.classList.remove('active');
+                modal.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                
+                modalContent.style.left = '50%';
+                modalContent.style.top = '50%';
+                modalContent.style.transform = '';
+                modalContent.style.opacity = '';
+
+                if (lastFocusedElement) {
+                    lastFocusedElement.focus();
+                    lastFocusedElement = null;
+                }
+            }, 250);
+        }
+
+        function closeModalOnBackdrop(event, section) {
+            if (event.target.classList.contains('modal')) {
+                closeModal(section);
+            }
+        }
+
+        function openProjectModal(card) {
+            const img = card.querySelector('.project-image');
+            const titleEl = card.querySelector('.project-title');
+            const title = (titleEl && titleEl.textContent.trim()) || img.alt;
+
+            document.getElementById('project-modal-title').textContent = title;
+
+            const modalImg = document.getElementById('project-modal-image');
+            modalImg.src = card.dataset.full || img.src;
+            modalImg.alt = img.alt;
+
+            const imageLink = document.getElementById('project-modal-link');
+            const href = card.getAttribute('href');
+
+            if (href) {
+                imageLink.href = href;
+                imageLink.setAttribute('aria-label', 'View original post: ' + img.alt);
+            } else {
+                imageLink.removeAttribute('href');
+                imageLink.removeAttribute('aria-label');
+            }
+
+            openModal('project');
+        }
+
+        document.querySelector('.projects-grid').addEventListener('click', function(e) {
+            // Let modified/middle clicks behave like a normal link (open in new tab, etc.)
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+            const card = e.target.closest('.project-card');
+            if (!card) return;
+
+            e.preventDefault();
+            openProjectModal(card);
+        });
+
+        document.querySelectorAll('.modal-header').forEach(header => {
+            header.addEventListener('pointerdown', function(e) {
+                if (e.target.classList.contains('modal-close')) return;
+                
+                isDragging = true;
+                currentModal = this.parentElement;
+                currentModal.classList.add('dragging');
+                
+                const rect = currentModal.getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+                
+                currentModal.style.transform = 'none';
+                currentModal.style.left = rect.left + 'px';
+                currentModal.style.top = rect.top + 'px';
+            });
+        });
+
+        document.addEventListener('pointermove', function(e) {
+            if (isDragging && currentModal) {
+                let newX = e.clientX - offsetX;
+                let newY = e.clientY - offsetY;
+                
+                const rect = currentModal.getBoundingClientRect();
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const resistanceZone = 120; 
+                
+                // resistance left
+                if (newX < resistanceZone) {
+                    const distance = resistanceZone - newX;
+                    const resistance = Math.min(distance / resistanceZone, 0.8) * 0.65;
+                    newX = newX + (distance * resistance);
+                }
+                
+                // resistance right
+                if (newX + rect.width > windowWidth - resistanceZone) {
+                    const distance = (newX + rect.width) - (windowWidth - resistanceZone);
+                    const resistance = Math.min(distance / resistanceZone, 0.8) * 0.65;
+                    newX = newX - (distance * resistance);
+                }
+                
+                // resistance top
+                if (newY < resistanceZone) {
+                    const distance = resistanceZone - newY;
+                    const resistance = Math.min(distance / resistanceZone, 0.8) * 0.65;
+                    newY = newY + (distance * resistance);
+                }
+                
+                // resistance bottom
+                if (newY + rect.height > windowHeight - resistanceZone) {
+                    const distance = (newY + rect.height) - (windowHeight - resistanceZone);
+                    const resistance = Math.min(distance / resistanceZone, 0.8) * 0.65;
+                    newY = newY - (distance * resistance);
+                }
+                
+                currentModal.style.left = newX + 'px';
+                currentModal.style.top = newY + 'px';
+            }
+        });
+
+        function endDrag() {
+            if (isDragging && currentModal) {
+                const modalContent = currentModal;
+                modalContent.classList.remove('dragging');
+                
+                const rect = modalContent.getBoundingClientRect();
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const threshold = 50; 
+                const safeZone = 120; 
+                
+                let newLeft = rect.left;
+                let newTop = rect.top;
+                let needsAdjustment = false;
+                
+                // Check left edge
+                if (rect.left < threshold) {
+                    newLeft = safeZone;
+                    needsAdjustment = true;
+                }
+                
+                // Check right edge
+                if (rect.right > windowWidth - threshold) {
+                    newLeft = windowWidth - safeZone - rect.width;
+                    needsAdjustment = true;
+                }
+                
+                // Check top edge
+                if (rect.top < threshold) {
+                    newTop = safeZone;
+                    needsAdjustment = true;
+                }
+                
+                // Check bottom edge
+                if (rect.bottom > windowHeight - threshold) {
+                    newTop = windowHeight - safeZone - rect.height;
+                    needsAdjustment = true;
+                }
+                
+                if (needsAdjustment) {
+                    modalContent.style.transition = 'left 0.6s ease, top 0.6s ease, transform 0.6s ease, opacity 0.25s ease';
+                    modalContent.style.left = newLeft + 'px';
+                    modalContent.style.top = newTop + 'px';
+                    modalContent.style.transform = 'none';
+                    
+                    setTimeout(() => {
+                        modalContent.style.transition = '';
+                    }, 600);
+                }
+            }
+            
+            isDragging = false;
+            currentModal = null;
+        }
+
+        document.addEventListener('pointerup', endDrag);
+        document.addEventListener('pointercancel', endDrag);
+
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            const activeModal = document.querySelector('.modal.active');
+            if (!activeModal) return;
+
+            if (e.key === 'Escape') {
+                closeModal(activeModal.id.replace('-modal', ''));
+                return;
+            }
+
+            if (e.key === 'Tab') {
+                const focusable = activeModal.querySelectorAll('a[href], button, [tabindex]:not([tabindex="-1"])');
+                if (focusable.length === 0) return;
+
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
