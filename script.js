@@ -71,8 +71,6 @@ function closeModal(section) {
 }
 
 function closeModalOnBackdrop(event, section) {
-    // Releasing a drag over the backdrop fires a click on it; only a
-    // genuine backdrop click (no drag involved) should close the modal
     const wasDragRelease = suppressBackdropClick;
     suppressBackdropClick = false;
 
@@ -134,11 +132,8 @@ document.querySelectorAll('.modal-header').forEach(header => {
         currentModal = this.parentElement;
         suppressBackdropClick = true;
 
-        // Keep receiving pointer events while the cursor is outside the window
         this.setPointerCapture(e.pointerId);
 
-        // Rect must be read before clearing the transition so a modal grabbed
-        // mid-snap-back freezes at its visual position instead of jumping
         const rect = currentModal.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
@@ -176,9 +171,7 @@ document.addEventListener('pointermove', function(e) {
             newX = newX - (distance * resistance);
         }
         
-        // resistance top — lighter than the other edges: the drag handle sits
-        // at the top of the modal, so the cursor has little travel left above
-        // it and full-strength resistance made the modal feel stuck
+        // resistance top — lighter than the other edges
         if (newY < resistanceZone) {
             const distance = resistanceZone - newY;
             const resistance = Math.min(distance / resistanceZone, 0.8) * 0.35;
@@ -208,8 +201,6 @@ function endDrag() {
         const threshold = 50;
         const safeZone = 120;
 
-        // The full safe zone can sit past the centered position on small
-        // windows, which made the snap-back overshoot; cap it at center
         const marginX = Math.min(safeZone, (windowWidth - rect.width) / 2);
         const marginY = Math.min(safeZone, (windowHeight - rect.height) / 2);
 
@@ -250,8 +241,6 @@ function endDrag() {
             modalContent.style.left = newLeft + 'px';
             modalContent.style.top = newTop + 'px';
 
-            // 650ms so cleanup lands after the 0.6s transition has fully
-            // finished; the timer is canceled if a new drag starts first
             snapBackTimer = setTimeout(() => {
                 modalContent.style.transition = '';
             }, 650);
