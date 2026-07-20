@@ -3,6 +3,8 @@ let currentModal = null;
 let offsetX = 0;
 let offsetY = 0;
 let lastFocusedElement = null;
+let snapBackTimer = null;
+let suppressBackdropClick = false;
 const closeTimers = {};
 
 function toggleProjectsView() {
@@ -24,6 +26,7 @@ function openModal(section) {
     modal.classList.remove('closing');
 
     const modalContent = modal.querySelector('.modal-content');
+    modalContent.style.transition = '';
     modalContent.style.left = '';
     modalContent.style.top = '';
     modalContent.style.transform = '';
@@ -68,7 +71,12 @@ function closeModal(section) {
 }
 
 function closeModalOnBackdrop(event, section) {
-    if (event.target.classList.contains('modal')) {
+    // Releasing a drag over the backdrop fires a click on it; only a
+    // genuine backdrop click (no drag involved) should close the modal
+    const wasDragRelease = suppressBackdropClick;
+    suppressBackdropClick = false;
+
+    if (!wasDragRelease && event.target.classList.contains('modal')) {
         closeModal(section);
     }
 }
@@ -124,12 +132,20 @@ document.querySelectorAll('.modal-header').forEach(header => {
         
         isDragging = true;
         currentModal = this.parentElement;
-        currentModal.classList.add('dragging');
-        
+        suppressBackdropClick = true;
+
+        // Keep receiving pointer events while the cursor is outside the window
+        this.setPointerCapture(e.pointerId);
+
+        // Rect must be read before clearing the transition so a modal grabbed
+        // mid-snap-back freezes at its visual position instead of jumping
         const rect = currentModal.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
-        
+
+        clearTimeout(snapBackTimer);
+        currentModal.classList.add('dragging');
+        currentModal.style.transition = '';
         currentModal.style.transform = 'none';
         currentModal.style.left = rect.left + 'px';
         currentModal.style.top = rect.top + 'px';
@@ -160,10 +176,12 @@ document.addEventListener('pointermove', function(e) {
             newX = newX - (distance * resistance);
         }
         
-        // resistance top
+        // resistance top — lighter than the other edges: the drag handle sits
+        // at the top of the modal, so the cursor has little travel left above
+        // it and full-strength resistance made the modal feel stuck
         if (newY < resistanceZone) {
             const distance = resistanceZone - newY;
-            const resistance = Math.min(distance / resistanceZone, 0.8) * 0.65;
+            const resistance = Math.min(distance / resistanceZone, 0.8) * 0.35;
             newY = newY + (distance * resistance);
         }
         
@@ -187,50 +205,56 @@ function endDrag() {
         const rect = modalContent.getBoundingClientRect();
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
-        const threshold = 50; 
-        const safeZone = 120; 
-        
+        const threshold = 50;
+        const safeZone = 120;
+
+        // The full safe zone can sit past the centered position on small
+        // windows, which made the snap-back overshoot; cap it at center
+        const marginX = Math.min(safeZone, (windowWidth - rect.width) / 2);
+        const marginY = Math.min(safeZone, (windowHeight - rect.height) / 2);
+
         let newLeft = rect.left;
         let newTop = rect.top;
         let needsAdjustment = false;
-        
+
         // Check left edge
         if (rect.left < threshold) {
-            newLeft = safeZone;
+            newLeft = marginX;
             needsAdjustment = true;
         }
-        
+
         // Check right edge
         if (rect.right > windowWidth - threshold) {
-            newLeft = windowWidth - safeZone - rect.width;
+            newLeft = windowWidth - marginX - rect.width;
             needsAdjustment = true;
         }
-        
+
         // Check top edge
         if (rect.top < threshold) {
-            newTop = safeZone;
+            newTop = marginY;
             needsAdjustment = true;
         }
-        
+
         // Check bottom edge
         if (rect.bottom > windowHeight - threshold) {
-            newTop = windowHeight - safeZone - rect.height;
+            newTop = windowHeight - marginY - rect.height;
             needsAdjustment = true;
         }
-        
+
         if (needsAdjustment) {
             // handle small screens resistance on modals
             newLeft = Math.max(8, Math.min(newLeft, windowWidth - rect.width - 8));
             newTop = Math.max(8, Math.min(newTop, windowHeight - rect.height - 8));
 
-            modalContent.style.transition = 'left 0.6s ease, top 0.6s ease, transform 0.6s ease, opacity 0.25s ease';
+            modalContent.style.transition = 'left 0.6s ease, top 0.6s ease, opacity 0.25s ease';
             modalContent.style.left = newLeft + 'px';
             modalContent.style.top = newTop + 'px';
-            modalContent.style.transform = 'none';
-            
-            setTimeout(() => {
+
+            // 650ms so cleanup lands after the 0.6s transition has fully
+            // finished; the timer is canceled if a new drag starts first
+            snapBackTimer = setTimeout(() => {
                 modalContent.style.transition = '';
-            }, 600);
+            }, 650);
         }
     }
     
