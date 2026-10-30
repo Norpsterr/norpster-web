@@ -7,11 +7,24 @@ let snapBackTimer = null;
 let suppressBackdropClick = false;
 const closeTimers = {};
 
+
+let activeSection = '';
+let previewSection = null;
+let restoringFocus = false;
+
+// page tint
+function updateTheme() {
+    document.body.dataset.theme = previewSection ?? activeSection;
+}
+
 function toggleProjectsView() {
     const isActive = document.body.classList.toggle('projects-view');
     document.documentElement.classList.toggle('projects-view');
 
     document.querySelector('.nav-item[aria-pressed]').setAttribute('aria-pressed', isActive);
+
+    activeSection = isActive ? 'projects' : '';
+    updateTheme();
 
     if (!isActive) {
         window.scrollTo(0, 0);
@@ -20,6 +33,12 @@ function toggleProjectsView() {
 
 function openModal(section) {
     const modal = document.getElementById(section + '-modal');
+
+    // project windows keep the projects color
+    if (section !== 'project') {
+        activeSection = section;
+        updateTheme();
+    }
 
     // Handle opening and closing in quick succession
     clearTimeout(closeTimers[section]);
@@ -49,7 +68,14 @@ function openModal(section) {
 function closeModal(section) {
     const modal = document.getElementById(section + '-modal');
     const modalContent = modal.querySelector('.modal-content');
-    
+    const video = modal.querySelector('video');
+
+    if (section !== 'project') {
+        activeSection = document.body.classList.contains('projects-view') ? 'projects' : '';
+        updateTheme();
+    }
+
+    if (video) video.pause();
     modal.classList.add('closing');
 
     closeTimers[section] = setTimeout(() => {
@@ -63,8 +89,15 @@ function closeModal(section) {
         modalContent.style.transform = '';
         modalContent.style.opacity = '';
 
+        if (video) {
+            video.removeAttribute('src');
+            video.load();
+        }
+
         if (lastFocusedElement) {
+            restoringFocus = true;
             lastFocusedElement.focus();
+            restoringFocus = false;
             lastFocusedElement = null;
         }
     }, 250);
@@ -80,22 +113,35 @@ function closeModalOnBackdrop(event, section) {
 }
 
 function openProjectModal(card) {
-    const img = card.querySelector('.project-image');
+    const media = card.querySelector('.project-image');
+    const isVideo = media.tagName === 'VIDEO';
+    const label = isVideo ? media.getAttribute('aria-label') : media.alt;
     const titleEl = card.querySelector('.project-title');
-    const title = (titleEl && titleEl.textContent.trim()) || img.alt;
+    const title = (titleEl && titleEl.textContent.trim()) || label;
 
     document.getElementById('project-modal-title').textContent = title;
 
     const modalImg = document.getElementById('project-modal-image');
-    modalImg.src = card.dataset.full || img.src;
-    modalImg.alt = img.alt;
+    const modalVideo = document.getElementById('project-modal-video');
+    modalImg.hidden = isVideo;
+    modalVideo.hidden = !isVideo;
+
+    if (isVideo) {
+        // video handling
+        modalVideo.poster = media.poster;
+        modalVideo.src = card.dataset.full || media.currentSrc;
+        modalVideo.setAttribute('aria-label', label);
+    } else {
+        modalImg.src = card.dataset.full || media.src;
+        modalImg.alt = label;
+    }
 
     const imageLink = document.getElementById('project-modal-link');
     const href = card.getAttribute('href');
 
     if (href) {
         imageLink.href = href;
-        imageLink.setAttribute('aria-label', 'View original post: ' + img.alt);
+        imageLink.setAttribute('aria-label', 'View original post: ' + label);
     } else {
         imageLink.removeAttribute('href');
         imageLink.removeAttribute('aria-label');
@@ -123,6 +169,47 @@ document.querySelector('.projects-grid').addEventListener('keydown', function(e)
     e.preventDefault();
     openProjectModal(card);
 });
+
+// videos only play when on screen
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+const videoObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !reducedMotion.matches) {
+            entry.target.play().catch(() => {});
+        } else {
+            entry.target.pause();
+        }
+    });
+});
+
+document.querySelectorAll('.projects-grid video').forEach(video => videoObserver.observe(video));
+
+// hover color effect
+document.querySelectorAll('.nav-item').forEach(item => {
+    const preview = () => {
+        previewSection = item.dataset.section;
+        updateTheme();
+    };
+    const clearPreview = () => {
+        previewSection = null;
+        updateTheme();
+    };
+
+    item.addEventListener('pointerenter', preview);
+    item.addEventListener('pointerleave', clearPreview);
+    item.addEventListener('focus', () => {
+        if (!restoringFocus && item.matches(':focus-visible')) preview();
+    });
+    item.addEventListener('blur', clearPreview);
+});
+
+
+const container = document.querySelector('.container');
+
+new ResizeObserver(() => {
+    document.documentElement.style.setProperty('--header-h', container.offsetHeight + 'px');
+}).observe(container);
 
 document.querySelectorAll('.modal-header').forEach(header => {
     header.addEventListener('pointerdown', function(e) {
@@ -233,7 +320,7 @@ function endDrag() {
         }
 
         if (needsAdjustment) {
-            // handle small screens resistance on modals
+            // stuff for small screens
             newLeft = Math.max(8, Math.min(newLeft, windowWidth - rect.width - 8));
             newTop = Math.max(8, Math.min(newTop, windowHeight - rect.height - 8));
 
